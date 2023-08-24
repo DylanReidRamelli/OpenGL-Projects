@@ -1,11 +1,20 @@
 support ?= 21
+CC = gcc
 
-CFLAGS += -Wpedantic
+CFLAGS += -Wpedantic -march=znver2
 CFLAGS += -D_N_=$(support)
-LDFLAGS += -framework OpenGL -framework GLUT
+
+OS := $(shell uname)
+ifeq ($(OS), Darwin)
+# Run MacOS commands
+LDFLAGS += -framework OpenGL -framework GLUT 
+else
+# check for Linux and run other commands
+LDFLAGS += -lGL -lglut
+endif
 
 test : main.o 
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) 
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 %.o : %.cpp
 	$(CC) $(CFLAGS) -c $<
