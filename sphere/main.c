@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <GL/glut.h>
+#include <GL/gl.h>
+
+
+#include "shader.hpp"
 
 float angle = 0.0f; // rotation angle
 float x = 0.0f;     // x position
 float y = 0.0f;     // y position
 float z = -5.0f;    // z position
+
 
 void idle() { glutPostRedisplay(); }
 

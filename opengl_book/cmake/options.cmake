@@ -1,0 +1,2 @@
+option(ENABLE_GLFW3 ON)
+option(ENABLE_GLEW ON)
