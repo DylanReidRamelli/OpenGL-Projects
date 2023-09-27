@@ -7,10 +7,10 @@ CFLAGS += -D_N_=$(support)
 OS := $(shell uname)
 ifeq ($(OS), Darwin)
 # Run MacOS commands
-LDFLAGS += -framework OpenGL -framework GLUT 
+LDFLAGS += -framework OpenGL -framework GLUT -lGLEW
 else
 # check for Linux and run other commands
-LDFLAGS += -lGL -lglut
+LDFLAGS += -lGL -lglut -lGLEW
 endif
 
 test : main.o 
