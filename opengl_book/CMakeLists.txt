@@ -1,64 +1,27 @@
 cmake_minimum_required(VERSION 3.20)
-project(OpenGLBook)
-
-include(cmake/options.cmake)
-include(cmake/functions.cmake)
-
-find_package(OpenGL REQUIRED)
-find_package(GLUT REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(GLFW3 REQUIRED)
+project(OpenGLBook C CXX)
+option(GLFW_BUILD_DOCS OFF)
+option(GLFW_BUILD_EXAMPLES OFF)
+option(GLFW_BUILD_TESTS OFF)
+add_subdirectory(OpenGLBook/Vendor/glfw)
 
 
+file(GLOB PROJECT_HEADERS headers/*.hpp)
+file(GLOB VENDOR_SOURCES OpenGLBook/Vendor/glad/src/glad.c)
 
-# INCLUDES OF DEPENDENCIES
-list(APPEND OGL_BUILD_INCLUDES ${GLEW_INCLUDE_DIR})
-list(APPEND OGL_BUILD_INCLUDES "${GLFW3_DIR}/include/")
-list(APPEND OGL_BUILD_INCLUDES ${GLUT_INCLUDE_DIRS})
-list(APPEND OGL_BUILD_INCLUDES ${OPENGL_INCLUDE_PATH})
+file(GLOB PROJECT_CONFIGS CMakeLists.txt
+  .gitmodules)
 
-
-# LIBRARIES OF DEPENDENCIES
-list(APPEND OGL_DEP_LIBRARIES "/usr/local/lib/libGLEW.dylib")
-list(APPEND OGL_DEP_LIBRARIES "/usr/local/lib/libglfw3.a")
-list(APPEND OGL_DEP_LIBRARIES ${GLUT_LIBRARIES})
-list(APPEND OGL_DEP_LIBRARIES ${OPENGL_LIBRARIES})
+source_group("Headers" FILES ${PROJECT_HEADERS})
+source_group("Sources" FILES ${PROJECT_SOURCES})
+source_group("Vendors" FILES ${VENDORS_SOURCES})
 
 
-# Could take out backend. core modules
-set(OGL_MODULES chapter1)
-
-foreach(MODULE ${OGL_MODULES})
-  add_subdirectory("${MODULE}")
-endforeach(MODULE)
-
-
-message(STATUS "OGL_SOURCES:${OGL_SOURCES}")
-message(STATUS "OGL_HEADERS:${OGL_HEADERS}")
-message(STATUS "OGL_BUILD_INCLUDES:${OGL_BUILD_INCLUDES}")
-message(STATUS "OGL_DEP_INCLUDES:${OGL_DEP_INCLUDES}")
-
-
-add_library(OGL ${OGL_SOURCES} ${OGL_HEADERS})
-
-foreach(include ${OGL_BUILD_INCLUDES})
-  target_include_directories(OGL BEFORE PUBLIC $<BUILD_INTERFACE:${include}>)
-endforeach()
-
-
-target_include_directories(
-  OGL BEFORE
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}>
-         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-         $<INSTALL_INTERFACE:include>)
-
-target_include_directories(OGL PUBLIC ${OGL_DEP_INCLUDES})
-target_link_libraries(OGL PUBLIC ${OGL_DEP_LIBRARIES})
-
-# target_link_libraries(OGL OpenGL GLUT GLEW GLFW3)
-
-# get_cmake_property(_variableNames VARIABLES)
-# list(SORT _variableNames)
-# foreach(_variableName ${_variableNames})
-#   message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()
+add_definitions(-DGLFW_INCLUDE_NONE
+                -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES} ${PROJECT_HEADERS} ${PROJECT_CONFIGS}
+                               ${VENDORS_SOURCES})
+target_link_libraries(${PROJECT_NAME} glfw
+                      ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
