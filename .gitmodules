@@ -1,0 +1,12 @@
+[submodule "opengl_book/external/glad"]
+	path = opengl_book/external/glad
+	url = https://github.com/Dav1dde/glad.git
+	branch = c
+[submodule "opengl_book/external/glfw"]
+	path = opengl_book/external/glfw
+	url = https://github.com/glfw/glfw.git
+	branch = master
+[submodule "opengl_book/external/glm"]
+	path = opengl_book/external/glm
+	url = https://github.com/g-truc/glm.git
+	branch = master
