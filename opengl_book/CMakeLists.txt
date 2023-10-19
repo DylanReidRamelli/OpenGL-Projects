@@ -35,17 +35,7 @@ add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 
-### HELLO_WINDOW ########
-
-# add_executable(hello_window Sources/hello_window.cpp ${PROJECT_HEADERS} ${PROJECT_CONFIGS} ${VENDORS_SOURCES})
-# target_link_libraries(hello_window glfw
-#                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
-# set_target_properties(hello_window PROPERTIES
-#     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
-
-
-
-list(APPEND EXAMPLES hello_window hello_triangle hello_shaders)
+list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture)
 
 
 foreach(example ${EXAMPLES})
