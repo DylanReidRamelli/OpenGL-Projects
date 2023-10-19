@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "hello_window.hpp"
+// #include "hello_window.hpp"
 
 void framebuffer_size_callback(GLFWwindow *window,int width, int height){
     glViewport(0,0,width,height);
@@ -17,8 +17,8 @@ void processInput(GLFWwindow *window){
 
 int main(){
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(800,600,"Learning OpenGL",NULL,NULL);

@@ -1,37 +1,60 @@
-cmake_minimum_required(VERSION 3.0)
-project(OpenGLBook)
+cmake_minimum_required(VERSION 3.5)
+project(LearnOpengl)
+
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
 add_subdirectory(external/glfw)
 
-include_directories(external/glad/include/ external/glfw/include/
+if(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -std=c++11")
+    if(NOT WIN32)
+        set(GLAD_LIBRARIES dl)
+    endif()
+endif()
+
+include_directories(Headers/
+                    external/glad/include/
+                    external/glfw/include/
                     external/glm/)
 
-file(GLOB PROJECT_HEADERS headers/*.hpp)
-file(GLOB VENDOR_SOURCES external/glad/src/glad.c)
-file(GLOB PROJECT_SOURCES chapter1/*.cpp)
-file(GLOB PROJECT_CONFIGS CMakeLists.txt ../.gitmodules)
+file(GLOB VENDORS_SOURCES external/glad/src/glad.c)
+file(GLOB PROJECT_HEADERS Headers/*.hpp)
+file(GLOB PROJECT_SOURCES Sources/*.cpp)
+file(GLOB PROJECT_CONFIGS CMakeLists.txt
+                          README.md)
 
 source_group("Headers" FILES ${PROJECT_HEADERS})
+# source_group("Shaders" FILES ${PROJECT_SHADERS})
 source_group("Sources" FILES ${PROJECT_SOURCES})
 source_group("Vendors" FILES ${VENDORS_SOURCES})
-source_group("Sources" FILES ${PROJECT_SOURCES})
-
-
-
-message(STATUS ${PROJECT_SOURCES})
-message(STATUS ${PROJECT_HEADERS})
-message(STATUS ${VENDOR_SOURCES})
 
 add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
-    add_executable(hello_triangle "chapter1/hello_triangle.cpp" ${PROJECT_HEADERS}
-    ${PROJECT_SHADERS} ${PROJECT_CONFIGS}
-    ${VENDORS_SOURCES})
-target_link_libraries(hello_triangle glfw ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
-# target_include_directories(hello_triangle "external/glad/include/")
-set_target_properties(hello_triangle PROPERTIES
-RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 
+### HELLO_WINDOW ########
+
+# add_executable(hello_window Sources/hello_window.cpp ${PROJECT_HEADERS} ${PROJECT_CONFIGS} ${VENDORS_SOURCES})
+# target_link_libraries(hello_window glfw
+#                       ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
+# set_target_properties(hello_window PROPERTIES
+#     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
+
+
+list(APPEND EXAMPLES hello_window hello_triangle hello_shaders)
+
+
+foreach(example ${EXAMPLES})
+    add_executable(${example} Sources/${example}.cpp ${PROJECT_HEADERS} ${PROJECT_CONFIGS} ${VENDORS_SOURCES})
+    target_link_libraries(${example} glfw ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
+    set_target_properties(${example} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+endforeach(example)
+
+# add_custom_command(
+#     TARGET ${PROJECT_NAME} POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Glitter/Shaders $<TARGET_FILE_DIR:${PROJECT_NAME}>
+#     DEPENDS ${PROJECT_SHADERS})
