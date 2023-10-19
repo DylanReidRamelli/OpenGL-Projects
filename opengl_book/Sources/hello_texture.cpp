@@ -92,11 +92,11 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Textures are references with an ID like vert.
-    unsigned int texture;
-    glGenTextures(1, &texture);
+    unsigned int texture1, texture2;
+    glGenTextures(1, &texture1);
 
     // Bind texture to GL_TEXTURE_2D
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture1);
 
     // Set texture options for current bound texture.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -118,8 +118,36 @@ int main()
     {
         std::cerr << "Failed to load image.\n";
     }
+
+
+
     // Free image memory
     stbi_image_free(data);
+
+    glGenTextures(1, &texture2);
+    // Bind texture to GL_TEXTURE_2D
+    glBindTexture(GL_TEXTURE_2D, texture2);
+
+    // Set texture options for current bound texture.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_set_flip_vertically_on_load(true);
+
+    data = stbi_load("../Assets/Textures/awesomeface.png", &width, &height, &nChannels,0);
+    if(data){
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA, width, height, 0,GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
+    stbi_image_free(data);
+
+
+    ourShader.use();
+    glad_glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"),0);
+    ourShader.setInt("texture2", 1);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -134,7 +162,10 @@ int main()
         // clear COLOR_BUFFER -> glClearColor.
         glClearColor(0.2f,0.3f,0.3f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        glBindTexture(GL_TEXTURE_2D, texture);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture2);
 
         //render container
         ourShader.use();
