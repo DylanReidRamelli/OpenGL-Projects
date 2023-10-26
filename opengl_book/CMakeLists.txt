@@ -35,7 +35,7 @@ add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 
-list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture)
+list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture hello_transformations)
 
 
 foreach(example ${EXAMPLES})
