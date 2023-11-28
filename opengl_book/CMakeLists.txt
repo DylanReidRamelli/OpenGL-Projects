@@ -35,9 +35,7 @@ add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 
-list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture practice_shaders)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture hello_transformations hello_coordinate_system)
 
 
 foreach(example ${EXAMPLES})
