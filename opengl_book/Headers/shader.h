@@ -11,7 +11,8 @@
 class Shader
 {
 public:
-    unsigned int ID;
+
+    GLuint ID;
 
     Shader(const char *vertexPath, const char *fragmentPath)
     {
@@ -41,6 +42,7 @@ public:
         }
         catch (std::ifstream::failure e)
         {
+            std::cout << e.what();
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
         }
         const char *vShaderCode = vertexCode.c_str();
@@ -48,8 +50,6 @@ public:
 
         // 2. compile shaders
         unsigned int vertex, fragment;
-        int success;
-        char infoLog[512];
 
         // vertex Shader
         vertex = glCreateShader(GL_VERTEX_SHADER);

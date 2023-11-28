@@ -35,7 +35,9 @@ add_definitions(-DGLFW_INCLUDE_NONE
                 -DPROJECT_SOURCE_DIR=\"${PROJECT_SOURCE_DIR}\")
 
 
-list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture)
+list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture practice_shaders)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 
 foreach(example ${EXAMPLES})
@@ -43,8 +45,3 @@ foreach(example ${EXAMPLES})
     target_link_libraries(${example} glfw ${GLFW_LIBRARIES} ${GLAD_LIBRARIES})
     set_target_properties(${example} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
 endforeach(example)
-
-# add_custom_command(
-#     TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Glitter/Shaders $<TARGET_FILE_DIR:${PROJECT_NAME}>
-#     DEPENDS ${PROJECT_SHADERS})
