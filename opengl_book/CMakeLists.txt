@@ -37,6 +37,7 @@ add_definitions(-DGLFW_INCLUDE_NONE
 
 list(APPEND EXAMPLES hello_window hello_triangle hello_shaders hello_texture hello_transformations hello_coordinate_system)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 foreach(example ${EXAMPLES})
     add_executable(${example} Sources/${example}.cpp ${PROJECT_HEADERS} ${PROJECT_CONFIGS} ${VENDORS_SOURCES})
